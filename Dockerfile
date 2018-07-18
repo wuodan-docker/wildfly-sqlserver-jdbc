@@ -18,6 +18,7 @@ RUN cd $HOME \
     && mv ${SQLSRV_JDBC_JAR} ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main \
 	&& sed -i "s#SQLSRV_JDBC_JAR#${SQLSRV_JDBC_JAR}#" ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main/module.xml \
     && chown -R jboss:0 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver \
-    && chmod -R 664 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver
+    && chmod -R 775 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver \
+    && chmod -R 664 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main/*
 
 USER jboss
