@@ -2,6 +2,7 @@ ARG WILDFLY_VERSION=10.1.0.Final
 FROM jboss/wildfly:${WILDFLY_VERSION}
 
 COPY sqlserver ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver
+COPY start.sh /
 
 # Set the SQLSRV_JDBC_VERSION env variable
 ENV SQLSRV_JDBC_VERSION 6.4.0
@@ -19,6 +20,12 @@ RUN cd $HOME \
 	&& sed -i "s#SQLSRV_JDBC_JAR#${SQLSRV_JDBC_JAR}#" ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main/module.xml \
     && chown -R jboss:0 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver \
     && chmod -R 775 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver \
-    && chmod -R 664 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main/*
+    && chmod -R 664 ${JBOSS_HOME}/modules/system/layers/base/com/microsoft/sqlserver/main/* \
+    && chown jboss:0 /start.sh \
+    && chmod 550 /start.sh
 
 USER jboss
+
+ENV SQL_SERVER= SQL_SERVER_PORT=1433
+
+CMD ["/start.sh", "-b", "0.0.0.0"]
